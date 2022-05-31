@@ -444,3 +444,48 @@ Step 2 :- Go to your Build project and click the Configure option. Choose the op
 
 
 Step 3 :- In the ```Deploy war/ear to a container``` section, enter the required details of the server on which the files need to be deployed and click on the Save button. These steps will now ensure that the necessary files get deployed to the necessary container after a successful build.
+
+
+## Jenkins GitHub Webhook
+
+###### Step 1:
+
+Setting up Jenkins Job.
+
+Log in to Jenkins, Click on the ```New Item``` option to create a new job.
+
+Then, select the ```Freestyle Project``` option and click on the ```Ok``` button.
+
+Go to the ```Source Code Management``` tab.
+
+Scroll down and under the ```Source Code Management``` section, choose the ```Git``` option.
+
+Now, go to the ```Build Triggers``` tab, Here choose the ```GitHub hook trigger for GITScm pulling``` option.
+
+Now, click on the “Apply” button to save the changes
+
+###### Step 2:
+
+Setting Up GitHub Webhook.
+
+Go to your ```GitHub``` account.
+
+Go to ```Settings``` of your GitHub account.
+
+Select the ```Webhooks``` option and then click on the ```Add Webhook``` button.
+
+Get the URL of Jenkins with Port number and Paste it in Payload URL text field.
+
+Append ```/github-webhook/``` to the Jenkins URL.
+
+Final Payload URL should look like in this format ```http://ip-address/port-number/github-webhook/```.
+
+Select the ```Content type``` to ```application/json``` format.
+
+Choose one option under ```Which events would you like to trigger this webhook?```
+
+Click on the ```Add Webhook``` button to save Jenkins GitHub Webhook
+
+
+
+
