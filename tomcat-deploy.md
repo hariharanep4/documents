@@ -38,11 +38,13 @@ For RedHat based distributions.
 ```
 sudo wget -O /etc/yum.repos.d/jenkins.repo \
 	https://pkg.jenkins.io/redhat-stable/jenkins.repo
+```
 
-
+```
 sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+```
 
-
+```
 sudo yum upgrade
 ```
 
@@ -87,19 +89,19 @@ Using respective Package Manager.
 
 For Debian based distributions.
 
-	```
-	sudo apt install -y maven
-	```
+```
+sudo apt install -y maven
+```
 
 For Red Hat based distributions.
 
-	```
-	sudo dnf install -y maven
+```
+sudo dnf install -y maven
 
-	or
+or
 
-	sudo yum install -y maven
-	```
+sudo yum install -y maven
+```
 
 
 
