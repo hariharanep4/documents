@@ -1,7 +1,7 @@
 EC2 Instance - Jenkins.
 
 
-1. Instructions to install Jenkins.
+## Instructions to install Jenkins.
 
 For Debian based distributions.
 
@@ -82,7 +82,7 @@ sudo systemctl status jenkins
 
 
 
-2. Instructions to install Maven.
+## Instructions to install Maven.
 
 
 Using respective Package Manager.
@@ -106,7 +106,7 @@ For Red Hat based distributions.
 
 
 
-EC2 Instance - Apache Tomcat Application Server.
+## Instructions to install Apache Tomcat Application Server.
 
 
 For Security purposes, Tomcat should run under a seperate, unprivalaged user.
@@ -435,7 +435,7 @@ sudo systemctl restart tomcat
 
 
 
-Jenkins Automated Deployment
+## Jenkins Automated Deployment
 
 
 Step 1 :- Go to Manage Jenkins → Manage Plugins. Go to the Available section and find the plugin “Deploy to container Plugin” and install the plugin. Restart the Jenkins.
