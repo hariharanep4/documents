@@ -1,6 +1,3 @@
-EC2 Instance - Jenkins.
-
-
 ## Instructions to install Jenkins.
 
 For Debian based distributions.
@@ -59,6 +56,7 @@ sudo yum install jenkins
 sudo systemctl daemon-reload
 ```
 
+
 Start Jenkins
 
 
@@ -116,7 +114,7 @@ Create a seperate user with name tomcat with appropriate permissions.
 
 ```
 sudo useradd -m -d /opt/tomcat -U -s /bin/false tomcat
-
+```
 -m, --create-home 	- Create the user's home directory if it does not exist.
 
 -d, --home-dir 		- The new user will be created using HOME_DIR as the value for the user's login directory.
@@ -126,7 +124,7 @@ sudo useradd -m -d /opt/tomcat -U -s /bin/false tomcat
 -s, --shell			- The name of a new user's login shell.
 
 /bin/false			- as the user's default shell to ensure that it’s not possible to log in as tomcat.
-```
+
 
 
 Install OpenJDK.
