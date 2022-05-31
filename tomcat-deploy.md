@@ -112,22 +112,21 @@ EC2 Instance - Apache Tomcat Application Server.
 For Security purposes, Tomcat should run under a seperate, unprivalaged user.
 
 
-	Create a seperate user with name tomcat with appropriate permissions.
+Create a seperate user with name tomcat with appropriate permissions.
 
-	```
-	sudo useradd -m -d /opt/tomcat -U -s /bin/false tomcat
+```
+sudo useradd -m -d /opt/tomcat -U -s /bin/false tomcat
 
-	-m, --create-home 	- Create the user's home directory if it does not exist.
+-m, --create-home 	- Create the user's home directory if it does not exist.
 
-	-d, --home-dir 		- The new user will be created using HOME_DIR as the value for the user's login directory.
+-d, --home-dir 		- The new user will be created using HOME_DIR as the value for the user's login directory.
 
-	-U, --user-group 	- Create a group with the same name as the user, and add the user to this group.
+-U, --user-group 	- Create a group with the same name as the user, and add the user to this group.
 
-	-s, --shell			- The name of a new user's login shell.
+-s, --shell			- The name of a new user's login shell.
 
-	/bin/false			- as the user's default shell to ensure that it’s not possible to log in as tomcat.
-	```
-
+/bin/false			- as the user's default shell to ensure that it’s not possible to log in as tomcat.
+```
 
 
 Install OpenJDK.
