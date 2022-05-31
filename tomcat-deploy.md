@@ -438,9 +438,9 @@ sudo systemctl restart tomcat
 ## Jenkins Automated Deployment
 
 
-Step 1 :- Go to Manage Jenkins → Manage Plugins. Go to the Available section and find the plugin “Deploy to container Plugin” and install the plugin. Restart the Jenkins.
+Step 1 :- Go to Manage Jenkins → Manage Plugins. Go to the Available section and find the plugin ```Deploy to container Plugin``` and install the plugin. Restart the Jenkins.
 
-Step 2 :- Go to your Build project and click the Configure option. Choose the option “Deploy war/ear to a container.
+Step 2 :- Go to your Build project and click the Configure option. Choose the option ```Deploy war/ear to a container```.
 
 
-Step 3 :- In the Deploy war/ear to a container section, enter the required details of the server on which the files need to be deployed and click on the Save button. These steps will now ensure that the necessary files get deployed to the necessary container after a successful build.
+Step 3 :- In the ```Deploy war/ear to a container``` section, enter the required details of the server on which the files need to be deployed and click on the Save button. These steps will now ensure that the necessary files get deployed to the necessary container after a successful build.
