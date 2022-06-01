@@ -1,0 +1,1 @@
+# CI using Jenkins, Nexus, SonarQube and Slack.
