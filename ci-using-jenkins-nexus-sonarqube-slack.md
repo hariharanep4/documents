@@ -1,7 +1,7 @@
 # CI using Jenkins, Nexus, SonarQube and Slack.
 
 
-## Jenkins setup
+## Jenkins Setup
 
 ```
 #! /bin/bash
@@ -17,7 +17,7 @@ sudo apt install -y jenkins
 
 ```
 
-## Nexus setup
+## Nexus Setup
 
 
 Install OpenJDK 8
@@ -164,7 +164,7 @@ sudo systemctl enable nexus
 
 ```
 
-## SonarQube setup
+## SonarQube Setup
 
 ```
 #!/bin/bash
