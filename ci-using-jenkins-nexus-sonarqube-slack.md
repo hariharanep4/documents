@@ -311,3 +311,144 @@ Now exit the database.
 ```
 \q
 ```
+
+
+###### Download and configure SonarQuge
+
+https://www.sonarqube.org/downloads/
+
+To download the zip file, issue the command.
+
+```
+wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.4.0.54424.zip
+```
+
+Next, unzip the zipped file.
+
+```
+unzip sonarqube-9.4.0.54424.zip
+```
+
+And move it to the /opt/ path.
+
+```
+sudo mv sonarqube-9.4.0.54424 /opt/sonarqube
+```
+
+###### Create new user and group
+
+Create a new user and group that will run the SonarQube service.
+
+```
+sudo groupadd sonar
+```
+
+Create the user with the home directory set to /opt/sonarqube as you add the user to the newly created group.
+
+```
+sudo useradd -c "SonarQube - User" -d /opt/sonarqube/ -g sonar sonar 
+```
+
+Then set ownership to the /opt/sonarqube directory.
+
+```
+sudo chown -R sonar:sonar /opt/sonarqube/
+```
+
+
+###### Configure SonarQube
+
+Open the SonarQube configuration file.
+
+```
+sudo vim  /opt/sonarqube/conf/sonar.properties
+```
+
+Uncomment the following lines.
+
+```
+sonar.jdbc.username=<username>
+sonar.jdbc.password=<password>
+```
+
+Modify these lines so that they look as what is provided.
+
+```
+sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube
+```
+
+```
+sonar.search.javaOpts=-Xmx512m -Xms512m -XX:MaxDirectMemorySize=256m -XX:+HeapDumpOnOutOfMemoryError
+```
+
+Modify the following lines.
+
+```
+sonar.web.host=0.0.0.0
+sonar.web.port=9000
+sonar.web.javaAdditionalOpts=-server
+sonar.log.level=INFO
+sonar.path.logs=logs
+```
+
+Modify the user that will run the SonarQube service by editing the file shown.
+
+```
+sudo vim /opt/sonarqube/bin/linux-x86-64/sonar.sh
+```
+
+Scroll down and ensure the line below appears as shown.
+
+```
+RUN_AS_USER=sonar
+```
+
+
+###### Create a systemd service file for SonarQube.
+
+```
+sudo vim  /etc/systemd/system/sonarqube.service
+```
+
+Add the following lines.
+
+```
+[Unit]
+Description=SonarQube service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
+ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+User=sonar
+Group=sonar
+Restart=always
+LimitNOFILE=65536
+LimitNPROC=4096
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+Save the changes and exit the file.
+
+Enable the SonarQube service to start upon booting.
+
+```
+sudo systemctl enable sonarqube
+```
+
+And start the SonarQube service.
+
+```
+sudo systemctl start sonarqube
+```
+
+To ensure that the SonarQube service is running, execute the command.
+
+```
+sudo systemctl statu sonarqube
+```
+
