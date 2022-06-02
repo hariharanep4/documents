@@ -167,77 +167,147 @@ sudo systemctl enable nexus
 ## SonarQube Setup
 
 ```
-#!/bin/bash
-cp /etc/sysctl.conf /root/sysctl.conf_backup
-cat <<EOT> /etc/sysctl.conf
+sudo apt update
+sudo apt install net-tools unzip vim curl
+```
+
+Increase the virtual memory kernel with the maximum number of open files and resource limits.
+
+```
+sudo sysctl -w vm.max_map_count=262144
+sudo sysctl -w fs.file-max=65536
+ulimit -n 65536
+ulimit -u 4096
+```
+
+You can make the changes persistent by modifying system parameters in the /etc/sysctl.conf configuration file.
+
+```
+sudo vim /etc/sysctl.conf
+```
+
+Add the following lines.
+
+```
 vm.max_map_count=262144
 fs.file-max=65536
 ulimit -n 65536
 ulimit -u 4096
-EOT
-cp /etc/security/limits.conf /root/sec_limit.conf_backup
-cat <<EOT> /etc/security/limits.conf
-sonarqube   -   nofile   65536
-sonarqube   -   nproc    409
-EOT
-sudo apt-get update -y
-sudo apt-get install openjdk-11-jdk -y
-sudo update-alternatives --config java
-java -version
-sudo apt update
+```
+
+Save and exit. 
+
+Open the ```limits.conf``` file.
+
+```
+sudo vim /etc/security/limits.conf
+```
+At the very bottom, add the following lines
+
+```
+sonarqube - nofile 65536
+sonarqube - nproc 4096
+```
+
+Save and exit. For the changes to come into effect, reboot your server.
+
+
+###### Install JDK
+
+```
+sudo apt install -y openjdk-11-jdk
+```
+
+###### Install PostgreSQL datbase
+
+Download and add the PostgreSQL GPG key.
+
+```
 wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
+```
+
+Add the PostgreSQL repository.
+
+```
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
-sudo apt install postgresql postgresql-contrib -y
-#sudo -u postgres psql -c "SELECT version();"
-sudo systemctl enable postgresql.service
-sudo systemctl start  postgresql.service
-sudo echo "postgres:admin123" | chpasswd
-runuser -l postgres -c "createuser sonar"
-sudo -i -u postgres psql -c "ALTER USER sonar WITH ENCRYPTED PASSWORD 'admin123';"
-sudo -i -u postgres psql -c "CREATE DATABASE sonarqube OWNER sonar;"
-sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE sonarqube to sonar;"
-systemctl restart  postgresql
-#systemctl status -l   postgresql
-netstat -tulpena | grep postgres
-sudo mkdir -p /sonarqube/
-cd /sonarqube/
-sudo curl -O https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.3.0.34182.zip
-sudo apt-get install zip -y
-sudo unzip -o sonarqube-8.3.0.34182.zip -d /opt/
-sudo mv /opt/sonarqube-8.3.0.34182/ /opt/sonarqube
-sudo groupadd sonar
-sudo useradd -c "SonarQube - User" -d /opt/sonarqube/ -g sonar sonar
-sudo chown sonar:sonar /opt/sonarqube/ -R
-cp /opt/sonarqube/conf/sonar.properties /root/sonar.properties_backup
-cat <<EOT> /opt/sonarqube/conf/sonar.properties
-sonar.jdbc.username=sonar
-sonar.jdbc.password=admin123
-sonar.jdbc.url=jdbc:postgresql://localhost/sonarqube
-sonar.web.host=0.0.0.0
-sonar.web.port=9000
-sonar.web.javaAdditionalOpts=-server
-sonar.search.javaOpts=-Xmx512m -Xms512m -XX:+HeapDumpOnOutOfMemoryError
-sonar.log.level=INFO
-sonar.path.logs=logs
-EOT
-cat <<EOT> /etc/systemd/system/sonarqube.service
-[Unit]
-Description=SonarQube service
-After=syslog.target network.target
-[Service]
-Type=forking
-ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
-ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
-User=sonar
-Group=sonar
-Restart=always
-LimitNOFILE=65536
-LimitNPROC=4096
-[Install]
-WantedBy=multi-user.target
-EOT
-systemctl daemon-reload
-systemctl enable sonarqube.service
+```
+
+Then update the package index to sync the new repository.
+
+```
+sudo apt update
+```
+
+Install the PostgreSQL database and its dependencies.
+
+```
+sudo apt install -y postgresql posgresql-contrib
 ```
 
 
+By default, the PostgreSQL service gets started after installation, if not started run the following command.
+
+```
+sudo systemctl start postgresql
+```
+
+```
+sudo systemctl status postgresql
+```
+
+Enable PostgreSQL to automatically start upon booting.
+
+```
+sudo systemctl enable postgresql
+```
+
+
+###### Configure PostgreSQL
+
+Moving on, we are going to set the password for the Postgres user that usually comes by default when PostgreSQL is installed. To do so, run the command.
+
+```
+sudo passwd postgres
+```
+
+Type the password and confirm it. Next, switch to the Postgres user.
+
+```
+su - postgres
+```
+
+Next, proceed and create a new database user.
+
+```
+createuser sonar
+```
+
+Once done, switch to the PostgreSQL prompt using the command.
+
+```
+psql
+```
+
+With access to the PostgreSQL shell, create a password for the user you just created.
+
+```
+ALTER USER sonar WITH ENCRYPTED PASSWORD 'sonar';
+```
+
+Next, create a SonarQube database with the user you created as the owner
+
+```
+CREATE DATABASE sonarqube OWNER sonar;
+```
+
+Then, assign or grant all privileges to the database use such that they have all the privileges to modify the database.
+
+```
+GRANT ALL PRIVILEGES ON DATABASE sonarqube to sonar;
+```
+
+Now exit the database.
+
+```
+\q
+```
