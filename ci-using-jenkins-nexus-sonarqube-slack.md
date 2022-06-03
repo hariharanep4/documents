@@ -449,6 +449,6 @@ sudo systemctl start sonarqube
 To ensure that the SonarQube service is running, execute the command.
 
 ```
-sudo systemctl statu sonarqube
+sudo systemctl status sonarqube
 ```
 
